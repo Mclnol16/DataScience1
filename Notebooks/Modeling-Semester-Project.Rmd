@@ -1,0 +1,187 @@
+---
+title: "Model"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r}
+library(gapminder)
+library(tidyverse)
+library(ggformula)
+library(ggfortify)
+library(gapminder)
+library(GGally)
+library(ISLR)
+library(tidyr)
+library(dataPreparation)
+library(partykit)
+library(rpart)
+library(mdsr)
+library(rpart.plot)
+library(interplot)
+library(tidyverse)
+library(coefplot)
+library(gridExtra)
+library(reshape2)
+library(boot)
+```
+# Modeling!
+
+I apologize for the mess that is the 180 lines above this. Here is what I want to focus on for the linear regression and data analysis.
+
+Can Universities be used to predict the Documents of a nation.
+Can Population be use dto predict the Documents of a nation.
+Do both Universities and Population predict the "rank" of a nation.
+Finally, I want to see if univerities and population can predict documents produced
+
+```{r}
+TDS20$Unversities <- as.numeric(TDS20$Unversities)
+TDS20$Rank <- as.character(TDS20$Rank)
+TDS20$Population <- as.numeric(TDS20$Population)
+
+TDS2$Unversities <- as.numeric(TDS2$Unversities)
+TDS2$Rank <- as.numeric(TDS2$Rank)
+TDS2$Population <- as.numeric(TDS2$Population)
+
+```
+
+```{r}
+TDS20 <-filter(TDS2, Rank <= 20)
+```
+
+```{r}
+
+ggplot(TDS20, aes(x = Documents, y = Unversities , color = Country)) + geom_point()
+ggplot(TDS20, aes(x = Documents, y = Population , color = Country)) + geom_point()
+
+```
+Lets being our linear regression. This regression is only for the top 20 countries and is not represenatitive of the whole data set.
+```{r}
+TDS20_lm <- lm(Documents ~ Unversities + Population + MVW, data = TDS2POPWVM)
+summary(TDS20_lm)
+```
+```{r}
+TDS20_lm1 <- lm(Documents ~ Unversities*Population*MVW,data=TDS2POPWVM)
+summary(TDS20_lm1)
+```
+
+```{r}
+predict(TDS20_lm,data.frame(Unversities=c(50),Population=c(60)),interval = "prediction")
+```
+
+```{r}
+summary(TDS20_lm)
+```
+
+
+Okay now I am goin to todo the whole data set instead of the top 20
+
+```{r}
+TDS2_lm <- lm(Documents ~ Unversities + Population, data = TDS2)
+TDS2_lm1 <- lm(Documents ~ Unversities*Population,data=TDS2)
+summary(TDS2_lm1)
+summary(TDS2_lm)
+```
+```{r}
+train_index <- sample(1:nrow(TDS2),0.8*nrow(TDS2))
+test_index <- sample(1:nrow(TDS2),0.2*nrow(TDS2))
+```
+
+okay I am going to make a training set and then a test set
+
+## NEED TO FIX THIS
+```{r}
+Xtrain_TDS2 <- TDS2[train_index,] %>% select(-Documents)
+Ytrain_TDS2 <- TDS2[train_index,] %>% select(Documents)
+
+Xtest <- TDS2[test_index,] %>% select (-Documents)
+Ytest <- TDS2[test_index,] %>% select(Documents)
+```
+scaling the data
+```{r}
+
+scales <- build_scales(dataSet = Xtrain_TDS2, cols = c("Population", "Unversities"), verbose = TRUE)
+
+print(scales)
+
+Xtrain_TDS2 <- fastScale(dataSet = Xtrain_TDS2, scales = scales, verbose = TRUE)
+Xtest <- fastScale(dataSet = Xtest, scales = scales, verbose = TRUE)
+```
+```{r}
+head(Xtrain_TDS2)
+```
+I have a question: Dont I need to scale the y variable as well?
+```{r}
+TDS21 <- cbind(Xtrain_TDS2,Ytrain_TDS2)
+
+```
+```{r}
+tally(~Documents,data=TDS21,format="percent")
+```
+```{r}
+rt.TD <-rpart(Documents ~ Population + Unversities, data = TDS21)
+```
+
+```{r}
+split <- 0.50
+TDS21 <- TDS21 %>% mutate(hi_number_universities = Unversities >= split)
+TDS21 %>% ggplot(mapping = aes(x=Unversities,y=Documents,color = "lightblue","aquamarine")) + 
+  geom_count(aes(color=hi_number_universities), position = position_jitter(width=0,height=0.1),alpha=0.5) + 
+  geom_vline(xintercept = split, color="slateblue",lty=2) + 
+  scale_x_log10()
+```
+
+```{r}
+prp(rt.TD, extra =101 , box.col ="orange" , split.box.col = "grey")
+```
+
+```{r}
+printcp(rt.TD)
+```
+
+
+```{r}
+TDS21 %>% ggplot(aes(x= Population, y = Documents )) + geom_point() + stat_smooth(method="lm")
+```
+```{r}
+TDS21 %>% ggplot(aes(x= Unversities, y = Documents )) + geom_point() + stat_smooth(method="lm")
+```
+
+```{r}
+interplot(m = TDS2_lm1 , var1 = "Population", var2 = "Unversities", hist = TRUE) + geom_line(color = "blue") + geom_hline(yintercept = 0, linetype = "dashed") 
+```
+
+```{r}
+
+interplot(m = TDS2_lm1 , var1 = "Unversities", var2 = "Population", point = T) +   theme(axis.text.x  = element_text(angle=90))
+```
+```{r}
+
+coefplot(TDS2_lm1)
+```
+```{r}
+coefplot(TDS2_lm)
+```
+
+
+
+```{r}
+TDS2POP <- TDS2 %>% left_join(population_total, by = "Country")
+TDS2POPWVM <- TDS2POP %>% left_join(mean_years_in_school_women_percent_men_25_to_34_years, by = "Country")
+```
+
+```{r}
+TDS2POPWVM
+```
+
+```{r}
+TDS3 <- mutate(TDS2POPWVM,MVW10 = ifelse(TDS2POPWVM$MVW > 100,1,0))
+```
+
+```{r}
+ggplot(data = TDS3) + geom_bar(aes(x=MVW10))
+```
+```{r}
+ggplot(data = TDS3) + geom_point(aes(x=MVW10,y=Documents))
+```

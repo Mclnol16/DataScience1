@@ -1,0 +1,59 @@
+---
+title: "Model Diganostic"
+output: html_notebook
+---
+
+```{r}
+TDS3
+```
+```{r}
+form1 <- as.formula("Documents ~ Population + Citations + Unversities")
+TDS3_lm1 <- lm(form1, data = TDS3)
+summary(TDS3_lm1)
+
+```
+
+
+```{r}
+
+coefplot(TDS3_lm1)
+
+```
+```{r}
+head(fortify(TDS3_lm1))
+```
+
+```{r}
+
+TDS3_lm1 %>% ggplot(mapping=aes(x=.fitted,y=.resid)) + geom_point(aes(color=)) + geom_hline(yintercept = 0) + geom_smooth(se=FALSE) + labs(x="Fitted Values", y = "Residuals")
+
+```
+
+```{r}
+TDS3_lm1 %>% ggplot(mapping = aes(sample=.stdresid)) + stat_qq() + geom_abline()
+```
+
+```{r}
+
+TDS3_lm1 %>% ggplot(mapping=aes(x=.resid)) + geom_histogram()
+```
+
+```{r}
+form2 <- as.formula("Documents ~ Population * Citations + Unversities + MVW")
+TDS3_lm2 <- lm(form2, data = TDS3)
+form3 <- as.formula("Documents ~ Population + Citations * Unversities + MVW")
+TDS3_lm3 <- lm(form3, data = TDS3)
+form4 <- as.formula("Documents ~ Population + Citations + Unversities * MVW")
+TDS3_lm4 <- lm(form4, data = TDS3)
+form5 <- as.formula("Documents ~ Population + Citations * Unversities * MVW")
+TDS3_lm5 <- lm(form5, data = TDS3)
+form6 <- as.formula("Documents ~ Population * Citations * Unversities * MVW")
+TDS3_lm6 <- lm(form6, data = TDS3)
+```
+```{r}
+multiplot(TDS3_lm1,TDS3_lm2,TDS3_lm3,TDS3_lm4,TDS3_lm5,TDS3_lm6)
+```
+
+```{r}
+anova(TDS3_lm1,TDS3_lm2,TDS3_lm3,TDS3_lm4,TDS3_lm5,TDS3_lm6)
+```

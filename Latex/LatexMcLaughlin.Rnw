@@ -1,0 +1,174 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{subfig}
+\begin{document}
+\title {Case Study of Scientifically Produced Documents\thanks{Special Thanks to Dr. Graham and his infinite wisdom/patience}}
+\author {Nolan McLaughlin\thanks{Neuroscience Program, Chemistry Department}}
+\maketitle
+
+\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\section{Abstract}
+\subsection{Libraries for RSweave}
+<<>>=
+library("knitr")
+library("xtable")
+library("kableExtra")
+options(xtable.floating = FALSE) 
+options(xtable.timestamp = "")
+options(width=40)
+@
+\section {Data}
+
+
+\subsection{Introduction into the Problem}
+Both collegiate and primary levels of education are important factors of a country. These factors are important in the way a country is viewed in the world and how much scientific "work" is done by a scientific community. Currently, the United States leads the world in producing scientific papers and has done so since the early 1900s.  However, this is trend of USA dominating the research world is no longer the case. Countries such as China, have started to close the gap between themselves and the United States in the amount of published work produced by them. 
+  Through this case study I hope to identify key reasons for why the United States is being threatened (scientifically) by China. To identify whether it is USA slumping or China improving its education. Furthermore, I want to identify other nations that has a high quality of education and compare their scientific output. Finally, I hope to make a model to identify trends in scientific output. With this information I plan to suggest a course of action to improve the Education system in the United States.
+\subsection{Introduction into the Data}
+My data set is about the amount of published researched done by each nation. The data set then ranks them by the amount of published research and other factors. In addition, it measures the amount of citations, self-citations, citations per document. I plan to use this data with Gap minder data to couple some interesting plots. Gap minder will provide me data of life expectancy, populations. education and others that will be important in analyzing data.
+	Questions I plan to ask from this data are how many documents are being produced yearly. What factors are most important to producing research? This is where Gap minder will come in handy as I will be able to look at many different variables. Ideas could be population/life expectancy/GDP/etc. to documents produced. Additionally, I would like to see how the trends of documents produced from the 1970s to now and I would like to see if other nations are catching up to the USA in producing documents. Finally, I would like to make a regression of the predicted number of documents to be produced in 2020. This regression would be based on the finding from variables that impact the production of documents 
+
+\subsection{The Data}
+Data has been collected from a multitude of sources:
+\begin{enumerate}
+  \item \href{https://www.scimagojr.com/countryrank.php}{Data about scientifically published documents}. I collected all the possible available data. This ended up giving me 19 data sets from 1996-2017.
+  \item \href{https://www.gapminder.org/data/}{Gapminder data, including Percentage of Women Educated vesus Men, the amount of people completeing Tertiary Education and population } I collected a total of three data sets from this source.
+  \item \href{http://www.webometrics.info/en/node/54}{Data about the number of tertiary education centers per country} I collected 1 data set from this source.
+\end{enumerate}
+
+\subsection{Libraries and Packages}
+  \begin{center}
+    \begin{tabular}{ l | c | r }
+    
+    \centering
+
+  tidyverse & gapminder & readxl \\ \hline
+  coefplot & gridExtra & VIM \\ \hline
+  mice & boot & reshape2 \\ \hline
+  rpart & mdsr & rpart.plot \\ \hline
+  interplot & 
+
+  \end{tabular}
+  \end{center}
+  Load all the libraries required for functions used in this document
+
+
+\subsection{Viewing the Data}
+<<>>= 
+load("~/Data Science Project 1/Data Final Semester Project/GlobalEnvironmentFinal.RData")
+kable(TDS1[1:10, 2:5 ], "latex", booktabs = T) %>%
+kable_styling(latex_options = "striped",full_width = T) %>%
+  footnote(general = "Table describing the amount of scientifically published documents.", general_title = " ")
+kable(CT[1:10, ], "latex", booktabs = T) %>%
+kable_styling(latex_options = "striped",full_width = T) %>%
+  footnote(general = "Table describing the amount of scientifically published documents.", general_title = " ")
+kable(WvM[1:10, ], "latex", booktabs = T) %>%
+kable_styling(latex_options = "striped",full_width = T) %>%
+  footnote(general = "Table describing the amount of scientifically published documents.", general_title = " ")
+kable(Population_Universities[1:10, ], "latex", booktabs = T) %>%
+kable_styling(latex_options = "striped",full_width = T) %>%
+  footnote(general = "Table describing the amount of scientifically published documents.", general_title = " ")
+
+@
+
+\section{Manipulations of the Data}
+Data manipulations began by shortening the data to focus on specific things. An example of this is removing columns 4-8 from TDS1. This data is extraneous to what I want to look at. I would then apply this to all the data set from TDS17-TDS96. 
+<<>>=
+TDS1[4:8] <- list(NULL)
+@
+
+Next important step was to combine all the data together into one data frame. The easiest way to combine these data was to have them leftjoin by country. The by command allows for specific matching cases to be placed together. Additionally, I combined the universities and population data. 
+<<eval=FALSE>>=
+TDS1B <- list(TDS17,TDS16,TDS15,TDS14,TDS13,TDS12,TDS11,TDS10,TDS09,TDS08,TDS07,TDS06,TDS05,TDS04,TDS03,TDS02,TDS01,TDS99,TDS98,TDS97,TDS96) %>% reduce(left_join, by = "Country")
+TDS1C <- TDS1B %>% left_join(Population_Universities, by = "Country")
+@
+
+After this combining the data became super untidy, so using the gather function I was able to fix that. More of the data was untidy you can see further purfications of the data in my notebook. 
+<<eval=FALSE>>=
+TDS1C_Tidy <- TDS1C %>% gather(`Documents_2017`,`Documents_216`,`Documents_2015`,`Documents_2014`,`Documents_2013`,`Documents_2012`,`Documents_2011`,`Documents_2010`,`Documents_2009`,`Documents_2007`,`Documents_2008`,`Documents_2006`,`Documents_2005`,`Documents_2004`,`Documents_2003`,`Documents_2002`,`Documents_2001`,`Documents_1999`,`Documents_1998`,`Documents_1997`,`Documents_1996`,key = "Year",value = "Documents")
+@
+
+The final manipulations ended with this data set being produced.
+<<>>=
+kable(TDS1D_Tidest[1:10, ], "latex", booktabs = T) %>%
+kable_styling(latex_options = "striped", "scaledown",font_size = 5) %>%
+  footnote(general = "Table describing the amount of scientifically published documents.", general_title = " ")
+@
+\section{Graphs}
+All of these graphs were producded from the data set above.
+<<message= FALSE, error=FALSE,echo=FALSE>>=
+Graph2
+Graph5
+Graph6
+Graph3
+Graph4
+@
+
+\subsection{Graph1}
+Graph 1 is a plot of documents produced per year for the top 20 countries. An interesting trend appears here. We see that there is not a significant change in most countries except for that of China and the United States. There is minor changes in the amount of documents produced other than China and United States. 
+\subsection{Graph2}
+Now looking at graph 2 we start to see another interesting trend. We see that even though a country may have a large amount of university they still may not be the highest rank or even produce the most amount of documents. This graph could be improved by maybe showing some designation of which country they are. 
+\subsection{Graph3}
+Graph 3 is a plot between population, universities, and the amount of documents produced. Here another trend is shown it seems that population has some kind of postive relationship with universities. This makes sense as the more people you have the more schools you probably have.
+\subsection{Graph4}
+Graph 4 is the measure of the population who has completed tertiary education. We can see as the years generally go on many countries have a higher and higher percentage of people who complete tertiary education. The most obvious trend is that as the years progress more and more nations have a higher percentage of population that have completed tertiary education. The most notable thing about this graph is the percentage in China. China is the line all the way at the bottom of the graph, and it may seem that their population has not risen with the rest of the worlds. However, this is misled due to the fact that China's population is so large and only really comparable to that of India. Even when you compare these two India has done a much better job of educating their people than India has.
+\subsection{Graph5}
+Graph 5 is a graph comparing ranks over time of the top 5 scientific producers. We see that United States has been number 1 since 1996 but the positions of China and India have been steadily rising over the last two decades. From the previous graph I would have guessed that India would be ranked higher but that is not the case.
+\section{Modeling}
+After making all these graphs, I wondered could I make a model to predict the most important variables in determine what made a nation produce the most number of documents. I started by creating linear models and then moved onto a general model formula to expand my modeling. A large part of my time was spent on imputations of my data, so we will start with that.
+\subsection
+Imputations is a data technique used to mimic real data in order to preform analysis on it. I used a package called VIM and MICE. Mice was extreme useful in the actual imputation processing and VIM was used to provide graphs for understanding how MICE was working. Let's take a look at a few of these. 
+<<>>=
+miss_plot2
+Graph8
+@
+\subsection{Missing Values}
+The data set is missing some values. This shows all the variables that are missing the variables. We see a majority of data is missing from the variables of MVW, CT, Population, and Universities. Now we need to fix this. I fixed this by using imputation. The mice package calculates approximates values for the data. This command computes the imputed values 5 times. Graph 8 shows were all the imputed values were imported to. As we can see, most of the imputed values were for MVW, CT, Population and Universities as expected.
+<<eval=FALSE>>=
+mice(TDS1F, m=5, maxit = 50, method = 'cart', seed = 500)
+@
+\subsection{LinearModel Fits}
+<<>>=
+graph13
+graph14
+Graph15
+@
+\subsection{GLM}
+Then I decided to use a GLM to identify a linear model that would fit the data. I tried many iterations and here is the general code for it.
+<<eval=FALSE>>=
+glm1_completeTDS1F <- glm(form1, data = completeTDS1F)
+form3 <- as.formula("Documents ~ Population + CT * Unversities + MVW + Citations")
+@
+\subsection{Decision Tree}
+<<>>=
+library(rpart.plot)
+library(rpart)
+rt.TD <-rpart(Documents ~ Population + Universities + Citations + CT + MVW, data = completeTDS1F)
+prp(rt.TD, extra =101 , box.col ="blue" , split.box.col = "orange")
+@
+This decision tree is providing a model inorder to predict how many documents are being produced based on a set of decisions. This type of modeling often over fits the data.\cite{james2013introduction}
+\section{Model Evaluation}
+I used Error,BIC,ANOVA, and Adjusted_Error. 
+<<>>=
+Graph12
+@
+According to these models, BIC performed the best. 
+\section{Conclusion}
+Being able to predict and model scientific production of a nation proved to be difficult. The variables used to model and regress against documents were not the correct ones to use. This is based off of the evaluations of the model which had a very high error. This modeling effort could be further improved by trying to do additonal models of regression and finding more variables that may have an impact on scientific production. A key factor that was not assesed in this project was the competency of tertiary education centers.\cite{blomeke2013modeling}\cite{psacharopoulos1985returns}
+\end{document}

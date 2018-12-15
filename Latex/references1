@@ -1,0 +1,23 @@
+@book{james2013introduction,
+  title={An introduction to statistical learning},
+  author={James, Gareth and Witten, Daniela and Hastie, Trevor and Tibshirani, Robert},
+  volume={112},
+  year={2013},
+  publisher={Springer}
+}
+@article{psacharopoulos1985returns,
+  title={Returns to education: a further international update and implications},
+  author={Psacharopoulos, George},
+  journal={Journal of Human resources},
+  pages={583--604},
+  year={1985},
+  publisher={JSTOR}
+}
+@incollection{blomeke2013modeling,
+  title={Modeling and measuring competencies in higher education},
+  author={Bl{\"o}meke, Sigrid and Zlatkin-Troitschanskaia, Olga and Kuhn, Christiane and Fege, Judith},
+  booktitle={Modeling and measuring competencies in higher education},
+  pages={1--10},
+  year={2013},
+  publisher={Springer}
+}

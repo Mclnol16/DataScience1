@@ -1,0 +1,537 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{subfig}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\title {Case Study of Scientifically Produced Documents\thanks{Special Thanks to Dr. Graham and his infinite wisdom/patience}}
+\author {Nolan McLaughlin\thanks{Neuroscience Program, Chemistry Department}}
+\maketitle
+
+\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\section{Abstract}
+\subsection{Libraries for RSweave}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlstr{"knitr"}\hlstd{)}
+\hlkwd{library}\hlstd{(}\hlstr{"xtable"}\hlstd{)}
+\hlkwd{library}\hlstd{(}\hlstr{"kableExtra"}\hlstd{)}
+\hlkwd{options}\hlstd{(}\hlkwc{xtable.floating} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\hlkwd{options}\hlstd{(}\hlkwc{xtable.timestamp} \hlstd{=} \hlstr{""}\hlstd{)}
+\hlkwd{options}\hlstd{(}\hlkwc{width}\hlstd{=}\hlnum{40}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\section {Data}
+
+
+\subsection{Introduction into the Problem}
+Both collegiate and primary levels of education are important factors of a country. These factors are important in the way a country is viewed in the world and how much scientific "work" is done by a scientific community. Currently, the United States leads the world in producing scientific papers and has done so since the early 1900s.  However, this is trend of USA dominating the research world is no longer the case. Countries such as China, have started to close the gap between themselves and the United States in the amount of published work produced by them. 
+  Through this case study I hope to identify key reasons for why the United States is being threatened (scientifically) by China. To identify whether it is USA slumping or China improving its education. Furthermore, I want to identify other nations that has a high quality of education and compare their scientific output. Finally, I hope to make a model to identify trends in scientific output. With this information I plan to suggest a course of action to improve the Education system in the United States.
+\subsection{Introduction into the Data}
+My data set is about the amount of published researched done by each nation. The data set then ranks them by the amount of published research and other factors. In addition, it measures the amount of citations, self-citations, citations per document. I plan to use this data with Gap minder data to couple some interesting plots. Gap minder will provide me data of life expectancy, populations. education and others that will be important in analyzing data.
+	Questions I plan to ask from this data are how many documents are being produced yearly. What factors are most important to producing research? This is where Gap minder will come in handy as I will be able to look at many different variables. Ideas could be population/life expectancy/GDP/etc. to documents produced. Additionally, I would like to see how the trends of documents produced from the 1970s to now and I would like to see if other nations are catching up to the USA in producing documents. Finally, I would like to make a regression of the predicted number of documents to be produced in 2020. This regression would be based on the finding from variables that impact the production of documents 
+
+\subsection{The Data}
+Data has been collected from a multitude of sources:
+\begin{enumerate}
+  \item \href{https://www.scimagojr.com/countryrank.php}{Data about scientifically published documents}. I collected all the possible available data. This ended up giving me 19 data sets from 1996-2017.
+  \item \href{https://www.gapminder.org/data/}{Gapminder data, including Percentage of Women Educated vesus Men, the amount of people completeing Tertiary Education and population } I collected a total of three data sets from this source.
+  \item \href{http://www.webometrics.info/en/node/54}{Data about the number of tertiary education centers per country} I collected 1 data set from this source.
+\end{enumerate}
+
+\subsection{Libraries and Packages}
+  \begin{center}
+    \begin{tabular}{ l | c | r }
+    
+    \centering
+
+  tidyverse & gapminder & readxl \\ \hline
+  coefplot & gridExtra & VIM \\ \hline
+  mice & boot & reshape2 \\ \hline
+  rpart & mdsr & rpart.plot \\ \hline
+  interplot & 
+
+  \end{tabular}
+  \end{center}
+  Load all the libraries required for functions used in this document
+
+
+\subsection{Viewing the Data}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlstr{"~/Data Science Project 1/Data Final Semester Project/GlobalEnvironmentFinal.RData"}\hlstd{)}
+\hlkwd{kable}\hlstd{(TDS1[}\hlnum{1}\hlopt{:}\hlnum{10}\hlstd{,} \hlnum{2}\hlopt{:}\hlnum{5} \hlstd{],} \hlstr{"latex"}\hlstd{,} \hlkwc{booktabs} \hlstd{= T)} \hlopt{%>%}
+\hlkwd{kable_styling}\hlstd{(}\hlkwc{latex_options} \hlstd{=} \hlstr{"striped"}\hlstd{,}\hlkwc{full_width} \hlstd{= T)} \hlopt{%>%}
+  \hlkwd{footnote}\hlstd{(}\hlkwc{general} \hlstd{=} \hlstr{"Table describing the amount of scientifically published documents."}\hlstd{,} \hlkwc{general_title} \hlstd{=} \hlstr{" "}\hlstd{)}
+\end{alltt}
+\end{kframe}\rowcolors{2}{gray!6}{white}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\hiderowcolors
+\toprule
+Country & Documents\_Total & Citable documents & Citations\\
+\midrule
+\showrowcolors
+United States & 11036243 & 9875662 & 267612868\\
+China & 5133924 & 5052579 & 39244368\\
+United Kingdom & 3150874 & 2705067 & 68803194\\
+Germany & 2790169 & 2590028 & 54834760\\
+Japan & 2539441 & 2437565 & 39049963\\
+\addlinespace
+France & 1967157 & 1837639 & 37865266\\
+Canada & 1594391 & 1446619 & 34945308\\
+Italy & 1583746 & 1451214 & 28548485\\
+India & 1472192 & 1379217 & 12637866\\
+Spain & 1256556 & 1156724 & 20661273\\
+\bottomrule
+\multicolumn{4}{l}{\textit{ }}\\
+\multicolumn{4}{l}{Table describing the amount of scientifically published documents.}\\
+\end{tabu}
+\rowcolors{2}{white}{white}
+
+\begin{kframe}\begin{alltt}
+\hlkwd{kable}\hlstd{(CT[}\hlnum{1}\hlopt{:}\hlnum{10}\hlstd{, ],} \hlstr{"latex"}\hlstd{,} \hlkwc{booktabs} \hlstd{= T)} \hlopt{%>%}
+\hlkwd{kable_styling}\hlstd{(}\hlkwc{latex_options} \hlstd{=} \hlstr{"striped"}\hlstd{,}\hlkwc{full_width} \hlstd{= T)} \hlopt{%>%}
+  \hlkwd{footnote}\hlstd{(}\hlkwc{general} \hlstd{=} \hlstr{"Table describing the amount of scientifically published documents."}\hlstd{,} \hlkwc{general_title} \hlstd{=} \hlstr{" "}\hlstd{)}
+\end{alltt}
+\end{kframe}\rowcolors{2}{gray!6}{white}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedleft}X>{\raggedleft}X}
+\hiderowcolors
+\toprule
+Country & X2 & Year\_CT & CT\\
+\midrule
+\showrowcolors
+Afghanistan & NA & 1970 & 1.08\\
+Afghanistan & NA & 1975 & 1.48\\
+Afghanistan & NA & 1980 & 1.96\\
+Afghanistan & NA & 1985 & 2.49\\
+Afghanistan & NA & 1990 & 2.91\\
+\addlinespace
+Afghanistan & NA & 1995 & 3.28\\
+Afghanistan & NA & 2000 & 3.50\\
+Afghanistan & NA & 2005 & 3.61\\
+Afghanistan & NA & 2010 & 3.65\\
+Albania & NA & 1970 & 1.67\\
+\bottomrule
+\multicolumn{4}{l}{\textit{ }}\\
+\multicolumn{4}{l}{Table describing the amount of scientifically published documents.}\\
+\end{tabu}
+\rowcolors{2}{white}{white}
+
+\begin{kframe}\begin{alltt}
+\hlkwd{kable}\hlstd{(WvM[}\hlnum{1}\hlopt{:}\hlnum{10}\hlstd{, ],} \hlstr{"latex"}\hlstd{,} \hlkwc{booktabs} \hlstd{= T)} \hlopt{%>%}
+\hlkwd{kable_styling}\hlstd{(}\hlkwc{latex_options} \hlstd{=} \hlstr{"striped"}\hlstd{,}\hlkwc{full_width} \hlstd{= T)} \hlopt{%>%}
+  \hlkwd{footnote}\hlstd{(}\hlkwc{general} \hlstd{=} \hlstr{"Table describing the amount of scientifically published documents."}\hlstd{,} \hlkwc{general_title} \hlstd{=} \hlstr{" "}\hlstd{)}
+\end{alltt}
+\end{kframe}\rowcolors{2}{gray!6}{white}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedleft}X}
+\hiderowcolors
+\toprule
+Country & MVW\\
+\midrule
+\showrowcolors
+Afghanistan & 23.7\\
+Albania & 103.0\\
+Algeria & 90.8\\
+Andorra & 106.0\\
+Angola & 73.3\\
+\addlinespace
+Antigua and Barbuda & 110.0\\
+Argentina & 108.0\\
+Armenia & 105.0\\
+Australia & 103.0\\
+Austria & 101.0\\
+\bottomrule
+\multicolumn{2}{l}{\textit{ }}\\
+\multicolumn{2}{l}{Table describing the amount of scientifically published documents.}\\
+\end{tabu}
+\rowcolors{2}{white}{white}
+
+\begin{kframe}\begin{alltt}
+\hlkwd{kable}\hlstd{(Population_Universities[}\hlnum{1}\hlopt{:}\hlnum{10}\hlstd{, ],} \hlstr{"latex"}\hlstd{,} \hlkwc{booktabs} \hlstd{= T)} \hlopt{%>%}
+\hlkwd{kable_styling}\hlstd{(}\hlkwc{latex_options} \hlstd{=} \hlstr{"striped"}\hlstd{,}\hlkwc{full_width} \hlstd{= T)} \hlopt{%>%}
+  \hlkwd{footnote}\hlstd{(}\hlkwc{general} \hlstd{=} \hlstr{"Table describing the amount of scientifically published documents."}\hlstd{,} \hlkwc{general_title} \hlstd{=} \hlstr{" "}\hlstd{)}
+\end{alltt}
+\end{kframe}\rowcolors{2}{gray!6}{white}
+
+\begin{tabu} to \linewidth {>{\raggedleft}X>{\raggedright}X>{\raggedright}X>{\raggedright}X}
+\hiderowcolors
+\toprule
+Rank & Country & Population\_2017 & Unversities\_2017\\
+\midrule
+\showrowcolors
+136 & Afghanistan & 35530081 & 88\\
+124 & Albania & 2873457 & 35\\
+53 & Algeria & 41318142 & 103\\
+213 & American Samoa & 55641 & 1\\
+196 & Andorra & 76965 & 1\\
+\addlinespace
+149 & Angola & 29784193 & 21\\
+215 & Anguilla & 14764 & 2\\
+198 & Antigua and Barbuda & 102012 & 1\\
+44 & Argentina & 44271041 & 116\\
+93 & Armenia & 2930450 & 35\\
+\bottomrule
+\multicolumn{4}{l}{\textit{ }}\\
+\multicolumn{4}{l}{Table describing the amount of scientifically published documents.}\\
+\end{tabu}
+\rowcolors{2}{white}{white}
+
+
+\end{knitrout}
+
+\section{Manipulations of the Data}
+Data manipulations began by shortening the data to focus on specific things. An example of this is removing columns 4-8 from TDS1. This data is extraneous to what I want to look at. I would then apply this to all the data set from TDS17-TDS96. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{TDS1[}\hlnum{4}\hlopt{:}\hlnum{8}\hlstd{]} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwa{NULL}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Next important step was to combine all the data together into one data frame. The easiest way to combine these data was to have them leftjoin by country. The by command allows for specific matching cases to be placed together. Additionally, I combined the universities and population data. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{TDS1B} \hlkwb{<-} \hlkwd{list}\hlstd{(TDS17,TDS16,TDS15,TDS14,TDS13,TDS12,TDS11,TDS10,TDS09,TDS08,TDS07,TDS06,TDS05,TDS04,TDS03,TDS02,TDS01,TDS99,TDS98,TDS97,TDS96)} \hlopt{%>%} \hlkwd{reduce}\hlstd{(left_join,} \hlkwc{by} \hlstd{=} \hlstr{"Country"}\hlstd{)}
+\hlstd{TDS1C} \hlkwb{<-} \hlstd{TDS1B} \hlopt{%>%} \hlkwd{left_join}\hlstd{(Population_Universities,} \hlkwc{by} \hlstd{=} \hlstr{"Country"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+After this combining the data became super untidy, so using the gather function I was able to fix that. More of the data was untidy you can see further purfications of the data in my notebook. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{TDS1C_Tidy} \hlkwb{<-} \hlstd{TDS1C} \hlopt{%>%} \hlkwd{gather}\hlstd{(`Documents_2017`,`Documents_216`,`Documents_2015`,`Documents_2014`,`Documents_2013`,`Documents_2012`,`Documents_2011`,`Documents_2010`,`Documents_2009`,`Documents_2007`,`Documents_2008`,`Documents_2006`,`Documents_2005`,`Documents_2004`,`Documents_2003`,`Documents_2002`,`Documents_2001`,`Documents_1999`,`Documents_1998`,`Documents_1997`,`Documents_1996`,}\hlkwc{key} \hlstd{=} \hlstr{"Year"}\hlstd{,}\hlkwc{value} \hlstd{=} \hlstr{"Documents"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The final manipulations ended with this data set being produced.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{kable}\hlstd{(TDS1D_Tidest[}\hlnum{1}\hlopt{:}\hlnum{10}\hlstd{, ],} \hlstr{"latex"}\hlstd{,} \hlkwc{booktabs} \hlstd{= T)} \hlopt{%>%}
+\hlkwd{kable_styling}\hlstd{(}\hlkwc{latex_options} \hlstd{=} \hlstr{"striped"}\hlstd{,} \hlstr{"scaledown"}\hlstd{,}\hlkwc{font_size} \hlstd{=} \hlnum{5}\hlstd{)} \hlopt{%>%}
+  \hlkwd{footnote}\hlstd{(}\hlkwc{general} \hlstd{=} \hlstr{"Table describing the amount of scientifically published documents."}\hlstd{,} \hlkwc{general_title} \hlstd{=} \hlstr{" "}\hlstd{)}
+\end{alltt}
+\end{kframe}\begin{table}[H]
+\centering\begingroup\fontsize{5}{7}\selectfont
+\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{rlrrlrlrrlr}
+\hiderowcolors
+\toprule
+Rank.x & Country & Population\_2017 & Unversities\_2017 & Year & Documents & X2 & Year\_CT & CT & Year\_Rank & Rank\\
+\midrule
+\showrowcolors
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1970 & 11.39 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1975 & 13.30 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1980 & 16.74 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1985 & 18.51 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1990 & 20.71 & Rank\_2017 & 1\\
+\addlinespace
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 1995 & 20.40 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 2000 & 22.97 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 2005 & 22.39 & Rank\_2017 & 1\\
+1 & United States & 325719178 & 3257 & Documents\_2017 & 626403 & NA & 2010 & 26.76 & Rank\_2017 & 1\\
+2 & China & 1386395000 & 2208 & Documents\_2017 & 508654 & NA & 1970 & 0.45 & Rank\_2017 & 2\\
+\bottomrule
+\multicolumn{11}{l}{\textit{ }}\\
+\multicolumn{11}{l}{Table describing the amount of scientifically published documents.}\\
+\end{tabular}
+\rowcolors{2}{white}{white}\endgroup{}
+\end{table}
+
+
+\end{knitrout}
+\section{Graphs}
+All of these graphs were producded from the data set above.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-1} 
+\begin{kframe}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 42966 rows containing missing\\\#\# values (geom\_point).}}\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-2} 
+
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-3} 
+\begin{kframe}
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: Removed 441 rows containing missing values (geom\_path).}}\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-4} 
+
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-7-5} 
+
+\end{knitrout}
+
+\subsection{Graph1}
+Graph 1 is a plot of documents produced per year for the top 20 countries. An interesting trend appears here. We see that there is not a significant change in most countries except for that of China and the United States. There is minor changes in the amount of documents produced other than China and United States. 
+\subsection{Graph2}
+Now looking at graph 2 we start to see another interesting trend. We see that even though a country may have a large amount of university they still may not be the highest rank or even produce the most amount of documents. This graph could be improved by maybe showing some designation of which country they are. 
+\subsection{Graph3}
+Graph 3 is a plot between population, universities, and the amount of documents produced. Here another trend is shown it seems that population has some kind of postive relationship with universities. This makes sense as the more people you have the more schools you probably have.
+\subsection{Graph4}
+Graph 4 is the measure of the population who has completed tertiary education. We can see as the years generally go on many countries have a higher and higher percentage of people who complete tertiary education. The most obvious trend is that as the years progress more and more nations have a higher percentage of population that have completed tertiary education. The most notable thing about this graph is the percentage in China. China is the line all the way at the bottom of the graph, and it may seem that their population has not risen with the rest of the worlds. However, this is misled due to the fact that China's population is so large and only really comparable to that of India. Even when you compare these two India has done a much better job of educating their people than India has.
+\subsection{Graph5}
+Graph 5 is a graph comparing ranks over time of the top 5 scientific producers. We see that United States has been number 1 since 1996 but the positions of China and India have been steadily rising over the last two decades. From the previous graph I would have guessed that India would be ranked higher but that is not the case.
+\section{Modeling}
+After making all these graphs, I wondered could I make a model to predict the most important variables in determine what made a nation produce the most number of documents. I started by creating linear models and then moved onto a general model formula to expand my modeling. A large part of my time was spent on imputations of my data, so we will start with that.
+\subsection
+Imputations is a data technique used to mimic real data in order to preform analysis on it. I used a package called VIM and MICE. Mice was extreme useful in the actual imputation processing and VIM was used to provide graphs for understanding how MICE was working. Let's take a look at a few of these. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{miss_plot2}
+\end{alltt}
+\begin{verbatim}
+## $x
+## # A tibble: 1,335 x 10
+##    Documents CitableDocuments Citations
+##        <dbl>            <dbl>     <dbl>
+##  1  11036243          9875662 267612868
+##  2  11036243          9875662 267612868
+##  3  11036243          9875662 267612868
+##  4  11036243          9875662 267612868
+##  5  11036243          9875662 267612868
+##  6  11036243          9875662 267612868
+##  7  11036243          9875662 267612868
+##  8  11036243          9875662 267612868
+##  9  11036243          9875662 267612868
+## 10   5133924          5052579  39244368
+## # ... with 1,325 more rows, and 7 more
+## #   variables: SelfCitations <dbl>,
+## #   Citationsperdocument <dbl>,
+## #   Hindex <dbl>, MVW <dbl>, CT <dbl>,
+## #   Population <dbl>,
+## #   Universities <dbl>
+## 
+## $combinations
+##  [1] "0:0:0:0:0:0:0:0:0:0"
+##  [2] "0:0:0:0:0:0:0:0:0:1"
+##  [3] "0:0:0:0:0:0:0:1:0:0"
+##  [4] "0:0:0:0:0:0:0:1:0:1"
+##  [5] "0:0:0:0:0:0:1:0:0:0"
+##  [6] "0:0:0:0:0:0:1:0:0:1"
+##  [7] "0:0:0:0:0:0:1:1:0:0"
+##  [8] "0:0:0:0:0:0:1:1:0:1"
+##  [9] "0:0:0:0:0:0:1:1:1:0"
+## [10] "0:0:0:0:0:0:1:1:1:1"
+## 
+## $count
+##  [1] 1134   45   31    9   45    9   19
+##  [8]   26    3   14
+## 
+## $percent
+##  [1] 84.9438202  3.3707865  2.3220974
+##  [4]  0.6741573  3.3707865  0.6741573
+##  [7]  1.4232210  1.9475655  0.2247191
+## [10]  1.0486891
+## 
+## $missings
+##                                  Variable
+## Documents                       Documents
+## CitableDocuments         CitableDocuments
+## Citations                       Citations
+## SelfCitations               SelfCitations
+## Citationsperdocument Citationsperdocument
+## Hindex                             Hindex
+## MVW                                   MVW
+## CT                                     CT
+## Population                     Population
+## Universities                 Universities
+##                      Count
+## Documents                0
+## CitableDocuments         0
+## Citations                0
+## SelfCitations            0
+## Citationsperdocument     0
+## Hindex                   0
+## MVW                    116
+## CT                     102
+## Population              17
+## Universities           103
+## 
+## $tabcomb
+##       [,1] [,2] [,3] [,4] [,5] [,6]
+##  [1,]    0    0    0    0    0    0
+##  [2,]    0    0    0    0    0    0
+##  [3,]    0    0    0    0    0    0
+##  [4,]    0    0    0    0    0    0
+##  [5,]    0    0    0    0    0    0
+##  [6,]    0    0    0    0    0    0
+##  [7,]    0    0    0    0    0    0
+##  [8,]    0    0    0    0    0    0
+##  [9,]    0    0    0    0    0    0
+## [10,]    0    0    0    0    0    0
+##       [,7] [,8] [,9] [,10]
+##  [1,]    0    0    0     0
+##  [2,]    0    0    0     1
+##  [3,]    0    1    0     0
+##  [4,]    0    1    0     1
+##  [5,]    1    0    0     0
+##  [6,]    1    0    0     1
+##  [7,]    1    1    0     0
+##  [8,]    1    1    0     1
+##  [9,]    1    1    1     0
+## [10,]    1    1    1     1
+## 
+## $imputed
+##  [1] FALSE FALSE FALSE FALSE FALSE FALSE
+##  [7] FALSE FALSE FALSE FALSE
+## 
+## attr(,"class")
+## [1] "aggr"
+\end{verbatim}
+\begin{alltt}
+\hlstd{Graph8}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-8-1} 
+
+\end{knitrout}
+\subsection{Missing Values}
+The data set is missing some values. This shows all the variables that are missing the variables. We see a majority of data is missing from the variables of MVW, CT, Population, and Universities. Now we need to fix this. I fixed this by using imputation. The mice package calculates approximates values for the data. This command computes the imputed values 5 times. Graph 8 shows were all the imputed values were imported to. As we can see, most of the imputed values were for MVW, CT, Population and Universities as expected.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{mice}\hlstd{(TDS1F,} \hlkwc{m}\hlstd{=}\hlnum{5}\hlstd{,} \hlkwc{maxit} \hlstd{=} \hlnum{50}\hlstd{,} \hlkwc{method} \hlstd{=} \hlstr{'cart'}\hlstd{,} \hlkwc{seed} \hlstd{=} \hlnum{500}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\subsection{LinearModel Fits}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{graph13}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-10-1} 
+\begin{kframe}\begin{alltt}
+\hlstd{graph14}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-10-2} 
+\begin{kframe}\begin{alltt}
+\hlstd{Graph15}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-10-3} 
+
+\end{knitrout}
+\subsection{GLM}
+Then I decided to use a GLM to identify a linear model that would fit the data. I tried many iterations and here is the general code for it.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{glm1_completeTDS1F} \hlkwb{<-} \hlkwd{glm}\hlstd{(form1,} \hlkwc{data} \hlstd{= completeTDS1F)}
+\hlstd{form3} \hlkwb{<-} \hlkwd{as.formula}\hlstd{(}\hlstr{"Documents ~ Population + CT * Unversities + MVW + Citations"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\subsection{Decision Tree}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(rpart.plot)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: rpart}}\begin{alltt}
+\hlkwd{library}\hlstd{(rpart)}
+\hlstd{rt.TD} \hlkwb{<-}\hlkwd{rpart}\hlstd{(Documents} \hlopt{~} \hlstd{Population} \hlopt{+} \hlstd{Universities} \hlopt{+} \hlstd{Citations} \hlopt{+} \hlstd{CT} \hlopt{+} \hlstd{MVW,} \hlkwc{data} \hlstd{= completeTDS1F)}
+\hlkwd{prp}\hlstd{(rt.TD,} \hlkwc{extra} \hlstd{=}\hlnum{101} \hlstd{,} \hlkwc{box.col} \hlstd{=}\hlstr{"blue"} \hlstd{,} \hlkwc{split.box.col} \hlstd{=} \hlstr{"orange"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-12-1} 
+
+\end{knitrout}
+This decision tree is providing a model inorder to predict how many documents are being produced based on a set of decisions. This type of modeling often over fits the data.\cite{james2013introduction}
+\section{Model Evaluation}
+I used Error,BIC,ANOVA, and Adjusted_Error. 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Graph12}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-13-1} 
+
+\end{knitrout}
+According to these models, BIC performed the best. 
+\section{Conclusion}
+Being able to predict and model scientific production of a nation proved to be difficult. The variables used to model and regress against documents were not the correct ones to use. This is based off of the evaluations of the model which had a very high error. This modeling effort could be further improved by trying to do additonal models of regression and finding more variables that may have an impact on scientific production. A key factor that was not assesed in this project was the competency of tertiary education centers.\cite{blomeke2013modeling}\cite{psacharopoulos1985returns}
+\end{document}

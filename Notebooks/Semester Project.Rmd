@@ -1,0 +1,280 @@
+---
+title: "Semester Project"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+
+# Problem Description and Objectives
+Nolan McLaughlin
+10/5/2018
+  Both colleigate and primary levels of education are important factors of a country. These factors are important in the way a country is viewed in the world and how much scientific "work" is done by a country. Currently, the United States leads the world in producing scientific papers and has done so since the begining of time. However, this is trend of USA dominating the research world is no longer the case. China has begun to match the United States in publications.  
+  Through this case study I hope to identify key reasons for why the United States is being threatened (scientifically) by China. To idenifty whether it is USA slumping or China improving its education. Furthermore, I want to identify other nations that has a high quality of education and compare their scientific output. Finally, I hope to make a model to idenitfy trends in scientific output. With this information I plan to suggest a course of action to improve the Education system in the United States.
+
+# Data Description
+
+Nolan McLaughlin
+9/12/2018
+	My data set is about the amount of published researched done by each nation. I then ranks them by the amount of published research. In addition, it measures the amount of citations, self-citations, citations per document. I plan to use this data with Gapminder data to couple some interesting plots. Gapminder will provide me data of life expectancy, populations. Education and others that will be important in analyzing data.
+	Questions I plan to ask from this data are how many documents are being produced yearly. What factors are most important to producing research? This is where gapminder will come in handy as I will be able to look at many different variables. Ideas could be population/life expectancy/GDP/etc to documents produced. Additionally, I would like to see how the trends of documents produced from the 1970s to now and I would like to see if other nations are catching up to the USA in producing documents. Finally, I would like to make a regression of the predicted amount of documents to be produced in 2020. This regression would be based on the finding from variables that impact the production of documents 
+	
+	important links : https://www.scimagojr.com/countryrank.php
+	                    http://datatopics.worldbank.org/education/wQueries/qachievement
+	                  https://data.oecd.org/eduatt/graduation-rate.htm
+	                  
+# Load, Formatting, and Transforming Data
+  Load all the libraries!
+```{r}
+library(gapminder)
+library(tidyverse)
+library(ggformula)
+library(ggfortify)
+library(gapminder)
+library(GGally)
+library(ISLR)
+library(tidyr)
+library(dataPreparation)
+library(partykit)
+library(rpart)
+library(mdsr)
+```
+Load the Data. For me this is already inside the projects folder so all I have todo is click it but if you did not have the data look above. Also lets take a look at some of the data.
+
+```{r}
+
+View(DS1)
+head(DS1)
+tail(DS1)
+summary(DS1)
+```
+Okay things we can take away from this:
+There are 8 variables: Rank, Country, Documents, Citable Documents, Citations, Self-Citations, Citations per document and H-Index
+Each varaible has the format of a DBL.
+
+Okay, now we are going to look at another data set. This is already in my project folder and if you need the data follow the links above.
+
+```{r}
+View(PopData)
+head(PopData)
+summary(PopData)
+```
+This data is untidy we are going to have to tidy it up. I dont remember any of the commmands but I need to look them up. So gather is the command and I used this to clean up the 2017 data. 
+```{r}
+?gather
+```
+```{r}
+PD1 <- PopData %>% gather(`2017`,key="year",value = "Population")
+PD1
+
+```
+Now I am going to filer by the 2017 data because that is all I want to use.
+
+```{r}
+
+PD17 <- filter(PD1,year == 2017)
+PD17
+```
+Okay so I tried filtering it but it didnt work so I went to excel deleted everything but the 2017.
+```{r}
+PopData2017
+```
+
+Okay lets do some exploratory data analysis.
+
+```{r}
+describe(DS1)
+```
+I forget how ggpairs works.
+
+```{r}
+?ggpairs
+
+ggpairs(DS1, cardinality_threshold = 300)
+```
+Okay a first I used all the countries, which caused my computer to process a whole bunch  of stuff and now im going to remove the countries. The graph was super unreadable as well.
+```{r}
+ggpairs(DS1 %>% select(-Country))
+```
+
+Even then the data did not look great. So I'm going to remove what I think are less important variables. However this starts to show me some interesting trends within my data. First there are some values with extremely high correlations. First it does not appeaer that Rank corresponds with a high correlation with anything which is surpising. I would have guessed that the higher the rank the higher the amount of documents produced. Lets take a look at this graph
+
+```{r}
+ggplot(data = TDS20) + geom_point(aes (x= Rank , y = log10(Documents)))
+```
+
+
+I really feel as thought there should be a correlation between Rank and the amount of documents produced. I think I need to reorganize the variable of rank. Maybe r studio is not processing it as an ordinal variable. **Ask Dr Graham.
+
+Lets plot some more stuff
+```{r}
+ggplot(data = DS1) + geom_point(aes( x = Country, y = Documents,))
+```
+
+```{r}
+ggplot(data = DS1) + geom_histogram(aes ( x = Documents, fill = Country))
+```
+```{r}
+ggplot(data = DS1) + geom_point(aes (x = PopData2017$`2017`, y = Documents))
+```
+Im going to spend a few minutes playing around with the data sets to make them of the same . Okay so I couldnt find a nice way to make it happen so I decided to make a new data set in excel with the data. AGain i have loaded this in my projects folder. The data comes from the PD17 and DS1
+```{r}
+?rbind
+TDS <- rbind(DS1,PD17)
+```
+```{r}
+TDS1
+```
+Lets plot population against documents producded.
+```{r}
+
+ggplot(data = TDS1) + geom_point( aes ( x = Population , y = Documents))
+```
+
+
+Again this is not very useful as the data points are so clustered it doesnt describe anything. Also notice there does not seem to be a trend in population versus documents produced.
+
+
+For the next part I am going to add to my data set again. I want to figure out the number of university per a nation and compare that to documents. I found this link http://www.webometrics.info/en/node/54 and it gave the number of university per country. I am going to input the data into excel and re upload a data sheet.
+
+Just spent an hour fixing and re entering in data but here we are.
+```{r}
+TDS2
+```
+lets plot some stuff:
+
+```{r}
+ggplot(data = TDS2) + geom_point( aes ( x = "Number of U" , y = Documents))
+```
+
+
+
+Turns out I had university set to a character and not a double so the data came out wonky. Heres attempt two.
+```{r}
+ggplot(data = TDS2) + geom_point( aes ( x = as.numeric(Unversities) , y = Documents  )) 
+````
+
+Again no significant correlation that can be determined visually.
+Now I am going to filter out the top 20 countries with documents producded
+
+```{r}
+
+TDS20 <-filter(TDS2, Rank < 20)
+
+ggplot(TDS20) + geom_point( aes ( x = Documents , y  = as.numeric(Unversities), color = Country)) 
+```
+
+Visiually not much can be seen for a trend. This is surpising for me as I expected the number of universities would be impactful or predict the amount of papers produced.
+
+```{r}
+head(TDS20)
+```
+```{r}
+TDS20$Unversities <- as.numeric(TDS20$Unversities)
+TDS20$Rank <- as.character(TDS20$Rank)
+TDS20$Population <- as.numeric(TDS20$Population)
+
+TDS2$Unversities <- as.numeric(TDS2$Unversities)
+TDS2$Rank <- as.numeric(TDS2$Rank)
+TDS2$Population <- as.numeric(TDS2$Population)
+
+```
+
+
+Okay Dr. Graham turns out that my data was messed up. The DF had the incorrect variable types and therefore when I went to plot them they were wrong. I then fixed this with the command above and now things are plotting much more reasonably. Now I am going to re run the gg pairs with the new data.
+
+```{r}
+ggpairs(TDS20 %>% select(-Country,-Rank), cardinality_threshold = 20)
+```
+```{r}
+head(TDS20)
+summary(TDS20)
+```
+# Modeling!
+
+I apologize for the mess that is the 180 lines above this. Here is what I want to focus on for the linear regression and data analysis.
+
+Can Universities be used to predict the Documents of a nation.
+Can Population be use dto predict the Documents of a nation.
+Do both Universities and Population predict the "rank" of a nation.
+Finally, I want to see if univerities and population can predict documents produced
+
+
+```{r}
+
+ggplot(TDS20, aes(x = Documents, y = Unversities , color = Country)) + geom_point()
+ggplot(TDS20, aes(x = Documents, y = Population , color = Country)) + geom_point()
+
+```
+Lets being our linear regression. This regression is only for the top 20 countries and is not represenatitive of the whole data set.
+```{r}
+TDS20_lm <- lm(Documents ~ Unversities + Population, data = TDS20)
+```
+```{r}
+TDS20_lm1 <- lm(Documents ~ Unversities*Population,data=TDS20)
+summary(TDS20_lm1)
+```
+
+```{r}
+predict(TDS20_lm,data.frame(Unversities=c(50),Population=c(60)),interval = "prediction")
+```
+
+```{r}
+summary(TDS20_lm)
+```
+
+
+Okay now I am goin to todo the whole data set instead of the top 20
+
+```{r}
+TDS2_lm <- lm(Documents ~ Unversities + Population, data = TDS2)
+TDS2_lm1 <- lm(Documents ~ Unversities*Population,data=TDS2)
+summary(TDS2_lm1)
+summary(TDS2_lm)
+```
+```{r}
+train_index <- sample(1:nrow(TDS2),0.8*nrow(TDS2))
+test_index <- sample(1:nrow(TDS2),0.2*nrow(TDS2))
+```
+
+okay I am going to make a training set and then a test set
+```{r}
+Xtrain_TDS2 <- TDS2[train_index,] %>% select(-Documents)
+Ytrain_TDS2 <- TDS2[train_index,] %>% select(Documents)
+
+Xtest <- TDS2[test_index,] %>% select (-Documents)
+Ytest <- TDS2[test_index,] %>% select(Documents)
+```
+scaling the data
+```{r}
+
+scales <- build_scales(dataSet = Xtrain_TDS2, cols = c("Population", "Unversities"), verbose = TRUE)
+
+print(scales)
+
+Xtrain_TDS2 <- fastScale(dataSet = Xtrain_TDS2, scales = scales, verbose = TRUE)
+Xtest <- fastScale(dataSet = Xtest, scales = scales, verbose = TRUE)
+```
+```{r}
+head(Xtrain_TDS2)
+```
+I have a question: Dont I need to scale the y variable as well?
+```{r}
+TDS21 <- cbind(Xtrain_TDS2,Ytrain_TDS2)
+tally(~Documents,data=TDS21,format="percent")
+
+```
+
+```{r}
+rpart(Documents ~ Unversities, data = TDS21)
+```
+
+```{r}
+split <- 1.44
+TDS21 <- TDS21 %>% mutate(hi_number_universities = Unversities >= split)
+TDS21 %>% ggplot(mapping = aes(x=Unversities,y=Documents,color = "lightblue","aquamarine")) + 
+  geom_count(aes(color=hi_number_universities), position = position_jitter(width=0,height=0.1),alpha=0.5) + 
+  geom_vline(xintercept = split, color="slateblue",lty=2) + 
+  scale_x_log10()
+```
+

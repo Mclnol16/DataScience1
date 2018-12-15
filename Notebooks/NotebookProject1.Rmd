@@ -1,0 +1,23 @@
+---
+title: "Semester Project"
+output: html_notebook
+---
+
+
+# Problem Description and Objectives
+Nolan McLaughlin
+10/5/2018
+  Both collegiate and primary levels of education are important factors of a country. These factors are important in the way a country is viewed in the world and how much scientific "work" is done by a country. Currently, the United States leads the world in producing scientific papers and has done so since the beginning of time. However, this is trend of USA dominating the research world is no longer the case. China has begun to match the United States in publications.  
+  Through this case study I hope to identify key reasons for why the United States is being threatened (scientifically) by China. To identify whether it is USA slumping or China improving its education. Furthermore, I want to identify other nations that has a high quality of education and compare their scientific output. Finally, I hope to make a model to identify trends in scientific output. With this information I plan to suggest a course of action to improve the Education system in the United States.
+
+
+# Data Description
+
+Nolan McLaughlin
+9/12/2018
+	My data set is about the amount of published researched done by each nation. I then ranks them by the amount of published research. In addition, it measures the amount of citations, self-citations, citations per document. I plan to use this data with Gapminder data to couple some interesting plots. Gapminder will provide me data of life expectancy, populations. Education and others that will be important in analyzing data.
+	Questions I plan to ask from this data are how many documents are being produced yearly. What factors are most important to producing research? This is where gapminder will come in handy as I will be able to look at many different variables. Ideas could be population/life expectancy/GDP/etc to documents produced. Additionally, I would like to see how the trends of documents produced from the 1970s to now and I would like to see if other nations are catching up to the USA in producing documents. Finally, I would like to make a regression of the predicted amount of documents to be produced in 2020. This regression would be based on the finding from variables that impact the production of documents 
+	
+	important links : https://www.scimagojr.com/countryrank.php
+	                  http://datatopics.worldbank.org/education/wQueries/qachievement
+	                  https://data.oecd.org/eduatt/graduation-rate.htm

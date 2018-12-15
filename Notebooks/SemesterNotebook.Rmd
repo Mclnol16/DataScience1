@@ -1,0 +1,483 @@
+---
+title: "Final Project Notebook"
+output: html_notebook
+---
+
+# Problem Description and Objectives
+10/5/2018
+  Both collegiate and primary levels of education are important factors of a country. These factors are important in the way a country is viewed in the world and how much scientific "work" is done by a scientific community. Currently, the United States leads the world in producing scientific papers and has done so since the early 1900s.  However, this is trend of USA dominating the research world is no longer the case. Countries such as China, have started to close the gap between themselves and the United States in the amount of published work produced by them. 
+  Through this case study I hope to identify key reasons for why the United States is being threatened (scientifically) by China. To identify whether it is USA slumping or China improving its education. Furthermore, I want to identify other nations that has a high quality of education and compare their scientific output. Finally, I hope to make a model to identify trends in scientific output. With this information I plan to suggest a course of action to improve the Education system in the United States.
+
+# Data Description
+9/12/2018
+	My data set is about the amount of published researched done by each nation. The data set then ranks them by the amount of published research and other factors. In addition, it measures the amount of citations, self-citations, citations per document. I plan to use this data with Gapminder data to couple some interesting plots. Gapminder will provide me data of life expectancy, populations. education and others that will be important in analyzing data.
+	Questions I plan to ask from this data are how many documents are being produced yearly. What factors are most important to producing research? This is where Gapminder will come in handy as I will be able to look at many different variables. Ideas could be population/life expectancy/GDP/etc. to documents produced. Additionally, I would like to see how the trends of documents produced from the 1970s to now and I would like to see if other nations are catching up to the USA in producing documents. Finally, I would like to make a regression of the predicted number of documents to be produced in 2020. This regression would be based on the finding from variables that impact the production of documents 
+	
+### Important Links:	
+	
+<https://www.scimagojr.com/countryrank.php>
+[link](https://www.scimagojr.com/countryrank.php) 
+<http://datatopics.worldbank.org/education/wQueries/qachievement>
+[link](http://datatopics.worldbank.org/education/wQueries/qachievement)
+<https://data.oecd.org/eduatt/graduation-rate.htm>
+[link]( https://data.oecd.org/eduatt/graduation-rate.htm)
+<http://www.webometrics.info/en/node/54>
+[link](http://www.webometrics.info/en/node/54)
+<https://ourworldindata.org/grapher/share-of-the-population-with-completed-tertiary-education>
+[link](https://ourworldindata.org/grapher/share-of-the-population-with-completed-tertiary-education)
+
+	There are a ton of libraries. I think the best solution to show where they are being used is to load them directly before loading them. A brief explanation will be given before they are loaded. readxl is a library to read excel files directly from a folder. I have a bunch of them to load so this makes it pretty efficen.
+```{r}
+library(readxl)
+library(tidyverse)
+library(gapminder)
+```
+## Data Manipulations
+```{r}
+#Data Final Semester Project/scimagojr 1996.xlsx
+TDS1 <- read_excel("Data Final Semester Project/scimagojr Total.xlsx")
+TDS17 <- read_excel("Data Final Semester Project/scimagojr 2017.xlsx")
+TDS16 <- read_excel("Data Final Semester Project/scimagojr 2016.xlsx")
+TDS15 <- read_excel("Data Final Semester Project/scimagojr 2015.xlsx")
+TDS14 <- read_excel("Data Final Semester Project/scimagojr 2014.xlsx")
+TDS13 <- read_excel("Data Final Semester Project/scimagojr 2013.xlsx")
+TDS12 <- read_excel("Data Final Semester Project/scimagojr 2012.xlsx")
+TDS11 <- read_excel("Data Final Semester Project/scimagojr 2011.xlsx")
+TDS10 <- read_excel("Data Final Semester Project/scimagojr 2010.xlsx")
+TDS09 <- read_excel("Data Final Semester Project/scimagojr 2009.xlsx")
+TDS08 <- read_excel("Data Final Semester Project/scimagojr 2008.xlsx")
+TDS07 <- read_excel("Data Final Semester Project/scimagojr 2007.xlsx")
+TDS06 <- read_excel("Data Final Semester Project/scimagojr 2006.xlsx")
+TDS05 <- read_excel("Data Final Semester Project/scimagojr 2005.xlsx")
+TDS04 <- read_excel("Data Final Semester Project/scimagojr 2004.xlsx")
+TDS03 <- read_excel("Data Final Semester Project/scimagojr 2003.xlsx")
+TDS02 <- read_excel("Data Final Semester Project/scimagojr 2002.xlsx")
+TDS01 <- read_excel("Data Final Semester Project/scimagojr 2001.xlsx")
+TDS99 <- read_excel("Data Final Semester Project/scimagojr 1999.xlsx")
+TDS98 <- read_excel("Data Final Semester Project/scimagojr 1998.xlsx")
+TDS97 <- read_excel("Data Final Semester Project/scimagojr 1997.xlsx")
+TDS96 <- read_excel("Data Final Semester Project/scimagojr 1996.xlsx")
+Population_Universities <- read_excel("Data Final Semester Project/Population-Universities.xlsx")
+CT <- read_csv("Data Final Semester Project/CT.csv")
+WvM <- read_csv("mean_years_in_school_women_percent_men_25_to_34_years.csv")
+
+
+```
+
+Okay I am going to remove all data except that of documents from the above data sets.
+
+```{r}
+TDS17[4:8] <- list(NULL)
+TDS16[4:8] <- list(NULL)
+TDS15[4:8] <- list(NULL)
+TDS14[4:8] <- list(NULL)
+TDS13[4:8] <- list(NULL)
+TDS12[4:8] <- list(NULL)
+TDS11[4:8] <- list(NULL)
+TDS10[4:8] <- list(NULL)
+TDS09[4:8] <- list(NULL)
+TDS08[4:8] <- list(NULL)
+TDS07[4:8] <- list(NULL)
+TDS06[4:8] <- list(NULL)
+TDS05[4:8] <- list(NULL)
+TDS04[4:8] <- list(NULL)
+TDS03[4:8] <- list(NULL)
+TDS02[4:8] <- list(NULL)
+TDS01[4:8] <- list(NULL)
+TDS99[4:8] <- list(NULL)
+TDS98[4:8] <- list(NULL)
+TDS97[4:8] <- list(NULL)
+TDS96[4:8] <- list(NULL)
+Population_Universities[3:8] <-list(NULL)
+```
+
+```{r}
+head(TDS17)
+```
+```{r}
+summary(TDS17)
+```
+
+All of this data is now uploaded. This data contains information about the amount of scientific documents produced from 1996-2017. This will serve as the main dataset. Now I am going to combine all of these data sets.
+```{r}
+TDS1B <- list(TDS17,TDS16,TDS15,TDS14,TDS13,TDS12,TDS11,TDS10,TDS09,TDS08,TDS07,TDS06,TDS05,TDS04,TDS03,TDS02,TDS01,TDS99,TDS98,TDS97,TDS96) %>% reduce(left_join, by = "Country")
+
+TDS1C <- TDS1B %>% left_join(Population_Universities, by = "Country")
+```
+
+```{r}
+names(TDS1C)[31]<-"Documents_2003"
+```
+```{r}
+TDS1C_Tidy <- TDS1C %>% gather(`Documents_2017`,`Documents_216`,`Documents_2015`,`Documents_2014`,`Documents_2013`,`Documents_2012`,`Documents_2011`,`Documents_2010`,`Documents_2009`,`Documents_2007`,`Documents_2008`,`Documents_2006`,`Documents_2005`,`Documents_2004`,`Documents_2003`,`Documents_2002`,`Documents_2001`,`Documents_1999`,`Documents_1998`,`Documents_1997`,`Documents_1996`,key = "Year",value = "Documents")
+```
+```{r}
+names(TDS1C_Tidy)[3]<-"Rank_2017"
+names(TDS1C_Tidy)[4]<-"Rank_2016"
+names(TDS1C_Tidy)[5]<-"Rank_2015"
+names(TDS1C_Tidy)[6]<-"Rank_2014"
+names(TDS1C_Tidy)[7]<-"Rank_2013"
+names(TDS1C_Tidy)[8]<-"Rank_2012"
+names(TDS1C_Tidy)[9]<-"Rank_2011"
+names(TDS1C_Tidy)[10]<-"Rank_2010"
+names(TDS1C_Tidy)[11]<-"Rank_2009"
+names(TDS1C_Tidy)[12]<-"Rank_2008"
+names(TDS1C_Tidy)[13]<-"Rank_2007"
+names(TDS1C_Tidy)[14]<-"Rank_2006"
+names(TDS1C_Tidy)[15]<-"Rank_2005"
+names(TDS1C_Tidy)[16]<-"Rank_2004"
+names(TDS1C_Tidy)[17]<-"Rank_2003"
+names(TDS1C_Tidy)[18]<-"Rank_2002"
+names(TDS1C_Tidy)[19]<-"Rank_2001"
+names(TDS1C_Tidy)[20]<-"Rank_1999"
+names(TDS1C_Tidy)[21]<-"Rank_1998"
+names(TDS1C_Tidy)[22]<-"Rank_1997"
+names(TDS1C_Tidy)[23]<-"Rank_1996"
+```
+```{r}
+TDS1C_Tider <- TDS1C_Tidy %>% gather(`Rank_2017`,`Rank_2016`,`Rank_2015`,`Rank_2014`,`Rank_2013`,`Rank_2012`,`Rank_2011`,`Rank_2010`,`Rank_2009`,`Rank_2007`,`Rank_2008`,`Rank_2006`,`Rank_2005`,`Rank_2004`,`Rank_2003`,`Rank_2002`,`Rank_2001`,`Rank_1999`,`Rank_1998`,`Rank_1997`,`Rank_1996`,key = "Year_Rank",value = "Rank")
+```
+```{r}
+TDS1C_Tider$Rank.x <- as.numeric(TDS1C_Tider$Rank.x)
+```
+```{r}
+TDS1D_Tidy <- TDS1C_Tidy %>% left_join(CT,by="Country")
+TDS1D_Tidest <- TDS1D_Tidy %>% gather(`Rank_2017`,`Rank_2016`,`Rank_2015`,`Rank_2014`,`Rank_2013`,`Rank_2012`,`Rank_2011`,`Rank_2010`,`Rank_2009`,`Rank_2007`,`Rank_2008`,`Rank_2006`,`Rank_2005`,`Rank_2004`,`Rank_2003`,`Rank_2002`,`Rank_2001`,`Rank_1999`,`Rank_1998`,`Rank_1997`,`Rank_1996`,key = "Year_Rank",value = "Rank")
+TDS1D_Tidest$Unversities_2017 <- as.numeric(TDS1D_Tidest$Unversities_2017)
+TDS1D_Tidest$Population_2017 <- as.numeric(TDS1D_Tidest$Population_2017)
+TDS1D_Tidest$Rank <- as.numeric(TDS1D_Tidest$Rank)
+```
+
+```{r}
+head(TDS1C_Tidy)
+```
+```{r}
+TDS1C_Tider$Unversities_2017 <- as.numeric(TDS1C_Tider$Unversities_2017)
+TDS1C_Tider$Population_2017 <- as.numeric(TDS1C_Tider$Population_2017)
+TDS1C_Tider$Rank <- as.numeric(TDS1C_Tider$Rank)
+```
+
+```{r}
+Graph2 <-ggplot(filter(TDS1D_Tidest, Rank.x <=19)) + geom_point(aes(x=Year,y=Documents, color = Country)) + theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+Graph3 <- ggplot(filter(TDS1D_Tidest, Rank.x <=19)) + geom_line(aes(y=CT, x = Year_CT, color = Country))
+```
+
+
+```{r}
+
+Graph4 <- ggplot(filter(TDS1D_Tidest,Rank.x <=5)) + geom_point(aes(y=Year_Rank, x =Rank, color = Country, size = Documents)) + scale_x_discrete(limits=c("1","2","3","4","5","6","7","8","9","10","11","12","13"))
+
+```
+
+```{r}
+
+Graph1 <- ggplot(filter(TDS1D_Tidest,Rank.x <= 25)) + geom_point(aes(x = Unversities_2017, y = Rank.x, color = Country, size = Documents))
+
+```
+```{r}
+Graph6<-ggplot(filter(TDS1D_Tidest,Rank.x <= 25)) + geom_point(aes(x = Unversities_2017, y = Population_2017, color = Country, size = Documents))
+```
+```{r}
+Graph5<-ggplot((TDS1D_Tidest)) + geom_point(aes(x = Unversities_2017, y = Rank.x,size = Documents))
+```
+```{r}
+ggplot(filter(TDS1D_Tidest,Rank.x <= 20)) + geom_point(aes(x = Unversities_2017, y = Documents, color = Country, size = Documents))
+```
+```{r}
+#names(gapminder)[1]<-"Country"
+#TDS1D_Tidest <- TDS1C_Tider %>% left_join(gapminder,by="Country")
+
+
+#ggplot(filter(TDS1D_Tidest,Rank.x <=10)) + geom_point(aes(x=Unversities_2017, y = gdpPercap, color = Country))
+```
+```{r}
+library(GGally)
+#ggpairs(TDS1C_Tider, cardinality_threshold = 300)
+ggplot((TDS1D_Tidest)) + geom_histogram(aes ( x = Documents ))
+```
+```{r}
+ggplot(filter(TDS1D_Tidest,Rank.x <=20)) + geom_histogram(aes ( x = Documents, color = Country ))
+```
+```{r}
+WvM
+TDS1D_Tidest
+TDS1D_Tidester <- TDS1D_Tidest %>% left_join(WvM, by = "Country")
+```
+```{r}
+TDS1D_Tidester
+```
+```{r}
+form1 <- as.formula("Documents ~ Population_2017 + CT + Unversities_2017 + MVW")
+lm_TDS1D <- lm(form1, data = TDS1D_Tidester)
+summary(lm_TDS1D)
+```
+
+```{r}
+library(coefplot)
+coefplot(lm_TDS1D)
+```
+
+```{r}
+head(fortify(lm_TDS1D))
+```
+```{r}
+lm_TDS1D %>% ggplot(mapping=aes(x=.fitted,y=.resid)) + geom_point(aes(color=)) + geom_hline(yintercept = 0) + geom_smooth(se=FALSE) + labs(x="Fitted Values", y = "Residuals")
+```
+
+```{r}
+lm_TDS1D %>% ggplot(mapping = aes(sample=.stdresid)) + stat_qq() + geom_abline()
+```
+
+```{r} 
+lm_TDS1D %>% ggplot(mapping=aes(x=.resid)) + geom_histogram()
+```
+
+```{r}
+form2 <- as.formula("Documents ~ Population_2017 * CT + Unversities_2017 + MVW")
+lm1_TDS1D <- lm(form2, data = TDS1D_Tidester)
+form3 <- as.formula("Documents ~ Population_2017 + CT * Unversities_2017 + MVW")
+lm2_TDS1D <- lm(form3, data = TDS1D_Tidester)
+form4 <- as.formula("Documents ~ Population_2017 + CT + Unversities_2017 * MVW")
+lm3_TDS1D <- lm(form4, data = TDS1D_Tidester)
+form5 <- as.formula("Documents ~ Population_2017 + CT * Unversities_2017 * MVW")
+lm4_TDS1D <- lm(form5, data = TDS1D_Tidester)
+form6 <- as.formula("Documents ~ Population_2017 * CT * Unversities_2017 * MVW")
+lm5_TDS1D <- lm(form6, data = TDS1D_Tidester)
+```
+
+```{r}
+multiplot(lm_TDS1D,lm1_TDS1D,lm2_TDS1D,lm3_TDS1D,lm4_TDS1D,lm5_TDS1D)
+```
+
+```{r}
+AIC(lm_TDS1D,lm1_TDS1D,lm2_TDS1D,lm3_TDS1D,lm4_TDS1D,lm5_TDS1D)
+```
+
+```{r}
+BIC(lm_TDS1D,lm1_TDS1D,lm2_TDS1D,lm3_TDS1D,lm4_TDS1D,lm5_TDS1D)
+```
+
+
+```{r}
+form1 <- as.formula("Documents ~ Population_2017 + CT + Unversities_2017 + MVW")
+glm_TDS1D <- glm(form1, data = TDS1D_Tidester)
+form2 <- as.formula("Documents ~ Population_2017 * CT + Unversities_2017 + MVW")
+glm1_TDS1D <- glm(form2, data = TDS1D_Tidester)
+form3 <- as.formula("Documents ~ Population_2017 + CT * Unversities_2017 + MVW")
+glm2_TDS1D <- glm(form3, data = TDS1D_Tidester)
+form4 <- as.formula("Documents ~ Population_2017 + CT + Unversities_2017 * MVW")
+glm3_TDS1D <- glm(form4, data = TDS1D_Tidester)
+form5 <- as.formula("Documents ~ Population_2017 + CT * Unversities_2017 * MVW")
+glm4_TDS1D <- glm(form5, data = TDS1D_Tidester)
+form6 <- as.formula("Documents ~ Population_2017 * CT * Unversities_2017 * MVW")
+glm5_TDS1D <- glm(form6, data = TDS1D_Tidester)
+```
+```{r}
+identical(coef(glm_TDS1D),coef(lm_TDS1D))
+```
+```{r}
+library(gridExtra)
+library(reshape2)
+library(boot)
+library(mice)
+library(VIM)
+```
+```{r}
+nrow((TDS1D_Tidester))
+sapply(TDS1D_Tidester, function(x) sum(is.na(x)))
+miss_plot <- aggr(TDS1D_Tidester, col=c('navyblue','yellow'),
+                    numbers=TRUE, sortVars=TRUE,
+                    labels=names(missing), cex.axis=.7,
+                    gap=3, ylab=c("Missing data","Pattern"))
+```
+
+```{r}
+#imputed_DataTDSD1 <- mice(TDS1D_Tidester, m=1, maxit = 50, method = 'cart', seed = 500)
+#tried to run this command by computer ran out RAM at 12.5gbs and it said its required more so I am going to have to think of a way to reduce the data or make it more fficent.
+TDS1E <- TDS1D_Tidester
+TDS1E[3] <- list(NULL)
+TDS1E[5] <- list(NULL)
+TDS1E[6] <- list(NULL)
+```
+```{r}
+TDS1E[4] <- list(NULL)
+```
+```{r}
+TDS1E[5] <- list(NULL)
+```
+```{r}
+miss_plot1 <- aggr(TDS1E, col=c('orange','pink'),
+                    numbers=TRUE, sortVars=TRUE,
+                    labels=names(missing), cex.axis=.7,
+                    gap=3, ylab=c("Missing data","Pattern"))
+```
+```{r}
+# <- mice(TDS1E, m=1, maxit = 50, method = 'cart', seed = 500) again too my computer up to 13gbs of RAM and decided to shut off....
+# i think the solution may be to run the orginal data set.
+TDS1F <- read_excel("Data Final Semester Project/scimagojr Total.xlsx")
+TDS1F <- TDS1F %>% left_join(WvM, by = "Country")
+TDS1F <- TDS1F %>% left_join(CT, by = "Country")
+TDS1F <- TDS1F %>% left_join(Population_Universities, by = "Country")
+TDS1F$Unversities_2017 <- as.numeric(TDS1F$Unversities_2017)
+TDS1F$Population_2017 <- as.numeric(TDS1F$Population_2017)
+TDS1F[10] <- list(NULL)
+
+
+```
+```{r}
+TDS1F[1:2] <-list(NULL)
+```
+```{r}
+TDS1F[8] <-list(NULL)
+```
+```{r}
+TDS1F[9] <-list(NULL)
+
+```
+```{r}
+names(TDS1F)[1]<-"Documents"
+names(TDS1F)[9]<-"Population"
+names(TDS1F)[10]<-"Universities"
+names(TDS1F)[2]<-"CitableDocuments"
+names(TDS1F)[4]<-"SelfCitations"
+names(TDS1F)[5]<-"Citationsperdocument"
+names(TDS1F)[6]<-"Hindex"
+
+```
+```{r}
+miss_plot3 <- aggr(TDS1F, col=c('orange','pink'),
+                    numbers=TRUE, sortVars=TRUE,
+                    labels=names(missing), cex.axis=.7,
+                    gap=3, ylab=c("Missing data","Pattern"))
+```
+```{r}
+tempdata <- mice(TDS1F, m=5, maxit = 50, method = 'cart', seed = 500)
+```
+```{r}
+completeTDS1F <- complete(tempdata, 1)
+```
+```{r}
+densityplot(tempdata)
+```
+```{r}
+Graph8 <- stripplot(tempdata, pch = 20, cex = 1.2)
+```
+It finally worked. Now to model everything and compare it.
+```{r}
+form1 <- as.formula("Documents ~ Population + CT + Universities + MVW + Citations")
+glm_completeTDS1F <- glm(form1, data = completeTDS1F)
+form2 <- as.formula("Documents ~ Population * CT + Unversities + MVW + Citations")
+glm1_completeTDS1F <- glm(form1, data = completeTDS1F)
+form3 <- as.formula("Documents ~ Population + CT * Unversities + MVW + Citations")
+glm2_completeTDS1F <- glm(form1, data = completeTDS1F)
+form4 <- as.formula("Documents ~ Population + CT + Unversities7 * MVW + Citations")
+glm3_completeTDS1F <- glm(form1, data = completeTDS1F)
+form5 <- as.formula("Documents ~ Population + CT * Unversities * MVW + Citations")
+glm4_completeTDS1F <- glm(form1, data = completeTDS1F)
+form6 <- as.formula("Documents ~ Population * CT * Unversities * MVW + Citations")
+glm5_completeTDS1F <- glm(form1, data = completeTDS1F)
+```
+```{r}
+FormA <- as.formula("Documents ~ Population + CT + Universities + MVW * Citations")
+lm_completeTDS1F <- lm(FormA, data = completeTDS1F)
+```
+
+```{r}
+completeTDS1F_CV1 <- cv.glm(completeTDS1F,glm_completeTDS1F, K=5)
+completeTDS1F_CV2 <- cv.glm(completeTDS1F,glm1_completeTDS1F, K=5)
+completeTDS1F_CV3 <- cv.glm(completeTDS1F,glm2_completeTDS1F, K=5)
+completeTDS1F_CV4 <- cv.glm(completeTDS1F,glm3_completeTDS1F, K=5)
+completeTDS1F_CV5 <- cv.glm(completeTDS1F,glm4_completeTDS1F, K=5)
+completeTDS1F_CV6 <- cv.glm(completeTDS1F,glm5_completeTDS1F, K=5)
+```
+```{r}
+cvResults <- as.data.frame(rbind(completeTDS1F_CV1$delta,completeTDS1F_CV2$delta,completeTDS1F_CV3$delta,completeTDS1F_CV4$delta,completeTDS1F_CV5$delta,completeTDS1F_CV6$delta))
+names(cvResults) <- c("Error","Adjusted_Error")
+cvResults$Model <- sprintf("glm_TDS1D%s",1:6)
+```
+```{r}
+cvResults
+```
+```{r}
+AIC(glm_completeTDS1F,glm1_completeTDS1F,glm2_completeTDS1F,glm3_completeTDS1F,glm4_completeTDS1F,glm5_completeTDS1F)
+```
+```{r}
+anova(glm_completeTDS1F,glm1_completeTDS1F,glm2_completeTDS1F,glm3_completeTDS1F,glm4_completeTDS1F,glm5_completeTDS1F,lm_completeTDS1F)
+```
+```{r}
+BIC(glm_completeTDS1F,glm1_completeTDS1F,glm2_completeTDS1F,glm3_completeTDS1F,glm4_completeTDS1F,glm5_completeTDS1F)
+```
+
+```{r}
+#TDSD1_CV1 <- cv.glm(TDS1D_Tidester,glm_TDS1D,K=5)
+#TDSD1_CV2 <- cv.glm(TDS1D_Tidester,glm1_TDS1D,K=5)
+#TDSD1_CV3 <- cv.glm(TDS1D_Tidester,glm2_TDS1D,K=5)
+#TDSD1_CV4 <- cv.glm(TDS1D_Tidester,glm3_TDS1D,K=5)
+#TDSD1_CV5 <- cv.glm(TDS1D_Tidester,glm4_TDS1D,K=5)
+#TDSD1_CV6 <- cv.glm(TDS1D_Tidester,glm5_TDS1D,K=5)
+```
+```{r}
+#cvResults <- as.data.frame(rbind(TDSD1_CV1$delta,TDSD1_CV2$delta,TDSD1_CV3$delta,TDSD1_CV4$delta,TDSD1_CV5$delta,TDSD1_CV6$delta))
+#names(cvResults) <- c("Error","Adjusted_Error")
+#cvResults$Model <- sprintf("glm_TDS1D%s",1:6)
+```
+```{r}
+#cvResults
+```
+
+#Modeling Stuffs
+```{r}
+library(rpart)
+library(mdsr)
+library(rpart.plot)
+library(interplot)
+library(ggfortify)
+```
+```{r}
+rt.TD <-rpart(Documents ~ Population + Universities + Citations + CT + MVW, data = completeTDS1F)
+```
+```{r}
+prp(rt.TD, extra =101 , box.col ="blue" , split.box.col = "orange")
+
+```
+```{r}
+autoplot(lm(Documents ~ Population + CT + Universities + MVW + Citations, data = completeTDS1F), label.size = 3)
+```
+```{r}
+cvResults$BIC <- BIC(glm_completeTDS1F,glm1_completeTDS1F,glm2_completeTDS1F,glm3_completeTDS1F,glm4_completeTDS1F,glm5_completeTDS1F)$BIC
+```
+```{r}
+cvANOVA <- anova(glm_completeTDS1F,glm1_completeTDS1F,glm2_completeTDS1F,glm3_completeTDS1F,glm4_completeTDS1F,glm5_completeTDS1F,lm_completeTDS1F)
+cvResults$ANOVA <- cvANOVA$`Resid. Dev`
+```
+```{r}
+cvMelt <- melt(cvResults,id.vars = "Model",variable.name = "Measure",value.name = "Value")
+cvMelt
+```
+```{r}
+Graph12 <-cvMelt %>% ggplot(mapping = aes(x=Model,y=Value)) + 
+  geom_line(aes(group=Measure,color=Measure)) + 
+  facet_wrap(~Measure,scales="free_y") + 
+  theme(axis.text.x = element_text(angle=90,vjust = 0.5)) + 
+  guides(color=FALSE)
+```
+```{r}
+graph13<-completeTDS1F %>% ggplot(mapping = aes(x=CT,y=Documents)) + geom_point(color="red") + 
+  stat_smooth(method = "lm",color="blue",lwd=1)
+```
+```{r}
+graph14<-completeTDS1F %>% ggplot(mapping = aes(x=MVW,y=Documents)) + geom_point(color="red") + 
+  stat_smooth(method = "lm",color="blue",lwd=1)
+```
+```{r}
+Graph15<-completeTDS1F %>% ggplot(mapping = aes(x=Population,y=Documents)) + geom_point(color="red") + 
+  stat_smooth(method = "lm",color="blue",lwd=1)
+```
+```{r}
+  completeTDS1F %>% ggplot(mapping = aes(x=Universities,y=Documents)) + geom_point(color="red") + 
+  stat_smooth(method = "lm",color="blue",lwd=1)
+```
+  
